@@ -1,5 +1,29 @@
 /* Your mini.css import should be here */
 @import '../node_modules/mini.css/dist/mini-default.min.css';
+/* Add mini.css via CDN in index.html or import here */
+
 form {
   min-width: 300px;
+}
+
+html,
+body,
+#root,
+.container,
+.center-page {
+  height: 100%;
+}
+
+.center-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header {
+  height: 5.1875rem;
+}
+
+a.button.active {
+  border: 1px solid var(--fore-color);
 }

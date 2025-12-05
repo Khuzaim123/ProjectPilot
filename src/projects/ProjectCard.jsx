@@ -1,5 +1,6 @@
 import { Project } from './Project';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router';
 
 function formatDescription(description) {
   return description.substring(0, 60) + '...';
@@ -16,11 +17,13 @@ function ProjectCard(props) {
     <div className="card">
       <img src={project.imageUrl} alt={project.name} />
       <section className="section dark">
-        <h5 className="strong">
-          <strong>{project.name}</strong>
-        </h5>
-        <p>{formatDescription(project.description)}</p>
-        <p>Budget : {project.budget.toLocaleString()}</p>
+        <Link to={'/projects/' + project.id}>
+          <h5 className="strong">
+            <strong>{project.name}</strong>
+          </h5>
+          <p>{formatDescription(project.description)}</p>
+          <p>Budget : {project.budget.toLocaleString()}</p>
+        </Link>
         <button
           className="bordered"
           onClick={() => {

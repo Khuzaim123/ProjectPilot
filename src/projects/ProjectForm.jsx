@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Project } from './Project';
+import { useSaveProject } from './projectHooks';
 
-function ProjectForm({ project: initialProject, onSave, onCancel }) {
+function ProjectForm({ project: initialProject, onCancel }) {
   const [project, setProject] = useState(initialProject);
   const [errors, setErrors] = useState({
     name: '',
@@ -10,19 +11,19 @@ function ProjectForm({ project: initialProject, onSave, onCancel }) {
     budget: '',
   });
 
+  const { mutate: saveProject, isPending } = useSaveProject();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!isValid()) return;
-    onSave(project);
+    saveProject(project);
+    onCancel();
   };
 
   const handleChange = (event) => {
     const { type, name, value, checked } = event.target;
-    // if input type is checkbox use checked
-    // otherwise it's type is text, number etc. so use value
     let updatedValue = type === 'checkbox' ? checked : value;
 
-    // if input type is number convert the updatedValue string to a number
     if (type === 'number') {
       updatedValue = Number(updatedValue);
     }
@@ -31,11 +32,6 @@ function ProjectForm({ project: initialProject, onSave, onCancel }) {
     };
 
     let updatedProject;
-    // need to do functional update b/c
-    // the new project state is based on the previous project state
-    // so we can keep the project properties that aren't being edited like project.id
-    // the spread operator (...) is used to
-    // spread the previous project properties and the new change
     setProject((p) => {
       updatedProject = new Project({ ...p, ...change });
       return updatedProject;
@@ -70,6 +66,8 @@ function ProjectForm({ project: initialProject, onSave, onCancel }) {
 
   return (
     <form className="input-group vertical" onSubmit={handleSubmit}>
+      {isPending && <span className="toast">Saving...</span>}
+
       <label htmlFor="name">Project Name</label>
       <input
         type="text"
@@ -131,7 +129,6 @@ function ProjectForm({ project: initialProject, onSave, onCancel }) {
 
 ProjectForm.propTypes = {
   project: PropTypes.instanceOf(Project),
-  onSave: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 };
 
