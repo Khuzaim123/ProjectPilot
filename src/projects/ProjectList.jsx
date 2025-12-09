@@ -4,7 +4,7 @@ import { Project } from './Project';
 import ProjectCard from './ProjectCard';
 import ProjectForm from './ProjectForm';
 
-function ProjectList({ projects, onSave }) {
+function ProjectList({ projects, onSave, onDelete }) {
   const [projectBeingEdited, setProjectBeingEdited] = useState(null);
 
   const handleEdit = (project) => {
@@ -15,6 +15,11 @@ function ProjectList({ projects, onSave }) {
     setProjectBeingEdited(null);
   };
 
+  const handleSave = (project) => {
+    onSave(project);
+    setProjectBeingEdited(null);
+  };
+
   return (
     <div className="row">
       {projects.map((project) => (
@@ -22,11 +27,15 @@ function ProjectList({ projects, onSave }) {
           {project === projectBeingEdited ? (
             <ProjectForm
               project={project}
-              onSave={onSave}
+              onSave={handleSave}
               onCancel={cancelEditing}
             />
           ) : (
-            <ProjectCard project={project} onEdit={handleEdit} />
+            <ProjectCard
+              project={project}
+              onEdit={handleEdit}
+              onDelete={onDelete}
+            />
           )}
         </div>
       ))}
@@ -37,6 +46,7 @@ function ProjectList({ projects, onSave }) {
 ProjectList.propTypes = {
   projects: PropTypes.arrayOf(PropTypes.instanceOf(Project)).isRequired,
   onSave: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default ProjectList;

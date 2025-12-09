@@ -1,10 +1,14 @@
 import ProjectsPage from './projects/ProjectsPage';
+import Layout from './components/Layout';
+import './App.css';
 
 function App() {
   return (
-    <div className="container">
-      <ProjectsPage />
-    </div>
+    <Layout>
+      <div className="container">
+        <ProjectsPage />
+      </div>
+    </Layout>
   );
 }
 
